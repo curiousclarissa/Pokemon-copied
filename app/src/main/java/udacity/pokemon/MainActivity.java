@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 package udacity.pokemon;
-
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+
+
+import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -57,14 +59,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... arg0) {
             HttpHandler sh = new HttpHandler();
-
+            // make a request to the URL
             String url = "https://raw.githubusercontent.com/Biuni/PokemonGO-Pokedex/master/pokedex.json";
-
-
             String jsonString = "";
             try {
-                // TODO: make a request to the URL
-
+                jsonString = sh.makeHttpRequest(createUrl(url));
             } catch (IOException e) {
                 return null;
             }
@@ -72,14 +71,19 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Response from url: " + jsonString);
             if (jsonString != null) {
                 try {
-                    //TODO: Create a new JSONObject
+                    //Create a new JSONObject
+                    JSONObject jsonObj = new JSONObject(jsonString);
 
-                    // TODO: Get the JSON Array node and name it "pokemons"
-
+                    // Get the JSON Array node
+                    JSONArray pokemons = jsonObj.getJSONArray("pokemon");
 
                     // looping through all Contacts
                     for (int i = 0; i < pokemons.length(); i++) {
-                        //TODO: get the JSONObject and its three attributes
+                        //get the JSONObject
+                        JSONObject c = pokemons.getJSONObject(i);
+                        String name = c.getString("name");
+                        String id = c.getString("id");
+                        String candy = c.getString("candy");
 
 
                         // tmp hash map for a single pokemon
@@ -141,3 +145,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 }
+
+
